@@ -1,22 +1,29 @@
-FastAPI Security Suite — KR3 Implementation
+# FastAPI Security Suite — KR3 Implementation
 Полноценная система безопасности для серверных приложений: аутентификация, авторизация, JWT, RBAC, защита документации.
-Быстрый старт
-Скачать проект
+## Быстрый старт
+### Скачать проект
+```bash
 git clone https://github.com/MicKhon/kr3 && cd kr3
 Подготовить окружение
 python -m venv .venv && source .venv/bin/activate # Linux/Mac
 или
 .venv\Scripts\activate # Windows
-Установить пакеты
+```
+### Установить пакеты
+```bash
 pip install -r requirements.txt
 Активировать конфигурацию
 cp .env.example .env # Linux/Mac
 или
 copy .env.example .env # Windows
-Запустить сервер
+```
+### Запустить сервер
+```bash
 uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 Приложение доступно: http://127.0.0.1:8000
-Архитектура решения
+```
+## Архитектура решения
+```bash
 kr3/
 ├── main.py # Точки входа, маршруты, зависимости
 ├── models.py # Pydantic-схемы и структуры данных
@@ -27,28 +34,40 @@ kr3/
 ├── .env.example # Шаблон конфигурации
 ├── .gitignore # Исключения для контроля версий
 └── README.md # Этот файл
-Модули безопасности
+```
+## Модули безопасности
 Базовая аутентификация (HTTP Basic)
 Проверка доступа:
+```bash
 curl -u admin:secret123 http://localhost:8000/auth/basic
 Ошибка авторизации вернёт 401 + WWW-Authenticate заголовок:
+```
+```bash
 curl -u fake:wrong http://localhost:8000/auth/basic
 Регистрация + хеширование паролей
-Создать аккаунт:
+```
+### Создать аккаунт:
+```bash
 curl -X POST http://localhost:8000/users/register
 -H "Content-Type: application/json"
 -d '{"username":"dev_user","password":"Str0ngP@ss!"}'
-Авторизоваться:
+```
+### Авторизоваться:
+```bash
 curl -u dev_user:Str0ngP@ss! http://localhost:8000/users/me
 Пароли хранятся как bcrypt-хеши. Сравнение строк — через secrets.compare_digest().
 JWT-сессии
-Получить токен:
+```
+### Получить токен:
+```bash
 curl -X POST http://localhost:8000/auth/jwt
 -H "Content-Type: application/json"
 -d '{"username":"dev_user","password":"Str0ngP@ss!"}'
 Ответ:
 {"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...","token_type":"bearer"}
 Использовать токен:
+```
+```bash
 curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 http://localhost:8000/secure/data
 Ограничение запросов (Rate Limiting)
@@ -56,12 +75,15 @@ http://localhost:8000/secure/data
 Эндпоинт /auth/jwt: лимит 5 запросов в минуту
 При превышении лимита возвращается 429 Too Many Requests
 Ролевая модель (RBAC)
-Роли и доступ:
+```
+### Роли и доступ:
+```bash
 guest: Чтение публичных ресурсов
 user: Чтение + обновление своих данных
 admin: Полный CRUD, управление пользователями
 Примеры запросов:
 Зона для авторизованных пользователей:
+
 curl -H "Authorization: Bearer USER_TOKEN" http://localhost:8000/workspace
 Админ-панель (только admin):
 curl -H "Authorization: Bearer ADMIN_TOKEN" http://localhost:8000/admin/dashboard
@@ -142,6 +164,7 @@ Problem: ModuleNotFoundError
 Solution: Проверьте активацию venv и pip install -r requirements.txt
 Problem: 401 при доступе к /docs
 Solution: В режиме DEV укажите DOCS_LOGIN/DOCS_PASS из .env
+```
 Problem: Токен не принимается
 Solution: Убедитесь, что в заголовке Authorization: Bearer <token> (с пробелом)
 Problem: База не создаётся
