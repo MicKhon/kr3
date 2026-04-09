@@ -148,17 +148,6 @@ python-dotenv>=1.0.0
 Установка:
 pip install -r requirements.txt
 Git-workflow для сдачи
-Инициализация (если ещё не сделано)
-git init
-git add .
-git commit -m "feat: complete KR3 security implementation"
-Привязка к удалённому репозиторию
-git remote add origin https://github.com/MicKhon/kr3.git
-git branch -M main
-Отправка (используйте PAT если включён 2FA)
-git push -u origin main
-Ссылка для сдачи в СДО:
-https://github.com/MicKhon/kr3
 Устранение неполадок
 Problem: ModuleNotFoundError
 Solution: Проверьте активацию venv и pip install -r requirements.txt
